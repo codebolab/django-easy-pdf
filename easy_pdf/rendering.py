@@ -9,7 +9,7 @@ from django.conf import settings
 from django.template import loader
 from django.http import HttpResponse
 from django.utils.http import urlquote
-from django.utils.six import BytesIO
+from io import BytesIO
 
 import xhtml2pdf.default
 from xhtml2pdf import pisa
@@ -81,13 +81,6 @@ def html_to_pdf(content, encoding="utf-8",
 def encode_filename(filename):
     """
     Encodes filename part for ``Content-Disposition: attachment``.
-
-    >>> print(encode_filename("abc.pdf"))
-    filename=abc.pdf
-    >>> print(encode_filename("aa bb.pdf"))
-    filename*=UTF-8''aa%20bb.pdf
-    >>> print(encode_filename(u"zażółć.pdf"))
-    filename*=UTF-8''za%C5%BC%C3%B3%C5%82%C4%87.pdf
     """
     # TODO: http://greenbytes.de/tech/webdav/rfc6266.html
     # TODO: http://greenbytes.de/tech/tc2231/
@@ -160,3 +153,4 @@ def render_to_pdf_response(request, template, context, using=None, filename=None
     except PDFRenderingError as e:
         logger.exception(e.message)
         return HttpResponse(e.message)
+
